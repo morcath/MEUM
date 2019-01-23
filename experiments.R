@@ -9,8 +9,8 @@ function_optima <- c(seq(from = -1400, to = -100, length = 14),
                      seq(from = 100, to = 1400, length = 14))
 function_dim = 10
 
-runs_num = 3
-functions_num = 2#28
+runs_num = 50
+functions_num = 28
 dimensions_num = 1
 set.seed(1)
 
@@ -33,7 +33,8 @@ for(i in 1:functions_num)
     
     result <- ga(type="real-valued",
                  maxiter = 100,
-                 useHistory = FALSE,
+                 useHistory = TRUE,
+                 historySetting = 3,
                  fitness=f,
                  popSize=populationSize,
                  pcrossover = probabilityCrossover, 

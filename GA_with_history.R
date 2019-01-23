@@ -19,6 +19,7 @@ ga <- function(type = c("binary", "real-valued", "permutation"),
                pcrossover = 0.8, 
                pmutation = 0.1,
                useHistory = FALSE,      #turn on/off usage of history
+               historySetting = 0,
                elitism = base::max(1, round(popSize*0.05)), 
                updatePop = FALSE,
                postFitness = NULL,
@@ -203,6 +204,7 @@ ga <- function(type = c("binary", "real-valued", "permutation"),
                 elitism = elitism, 
                 pcrossover = pcrossover, 
                 pmutation = if(is.numeric(pmutation)) pmutation else NA,
+                historySetting = historySetting,
                 useHistory = useHistory,    #history
                 optim = optim,
                 fitness = Fitness, 
@@ -257,10 +259,10 @@ ga <- function(type = c("binary", "real-valued", "permutation"),
     #update parameters based on history
     if(useHistory & length(object@history$history.fitness) > 2)
     {
-      alpha = 0.9
-      #print("---")
-      #print(pmutation)
-      #print("###")
+      alpha = 0.99
+      print("---")
+      print(popSize)
+      print("###")
       size = length(object@history$history.fitness)
 
       actual = summary(object@history$history.fitness[[size]])
@@ -270,11 +272,33 @@ ga <- function(type = c("binary", "real-valued", "permutation"),
       
       if(actual<previous)
       {
-        pmutation = pmutation * alpha
+        if(historySetting == 1)
+        {
+          pmutation = pmutation * alpha 
+        }
+        else if(historySetting == 2)
+        {
+          pcrossover = pcrossover * alpha
+        }
       }
       else
       {
-        pmutation = pmutation * (1/alpha)
+        if(historySetting == 1)
+        {
+          pmutation = pmutation * (1/alpha) 
+          if(pmutation > 1)
+          {
+            pmutation = 1
+          }
+        }
+        else if(historySetting == 2)
+        {
+          pcrossover = pcrossover * (1/alpha)
+          if(pcrossover > 1)
+          {
+            prcrossover = 1
+          }
+        }
       }
 
     }
@@ -478,6 +502,7 @@ setClass(Class = "ga",
                         elitism = "numeric", 
                         pcrossover = "numeric", 
                         pmutation = "numericOrNA",
+                        historySetting = "numeric",
                         useHistory = "logical",    #todo description
                         history = "list",          # 3 - check the correctenss history var 
                         optim = "logical",
