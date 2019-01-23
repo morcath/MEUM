@@ -9,8 +9,8 @@ function_optima <- c(seq(from = -1400, to = -100, length = 14),
                      seq(from = 100, to = 1400, length = 14))
 function_dim = 10
 
-runs_num = 50
-functions_num = 1#28
+runs_num = 3
+functions_num = 2#28
 dimensions_num = 1
 set.seed(1)
 
@@ -33,7 +33,7 @@ for(i in 1:functions_num)
     
     result <- ga(type="real-valued",
                  maxiter = 100,
-                 useHistory = TRUE,
+                 useHistory = FALSE,
                  fitness=f,
                  popSize=populationSize,
                  pcrossover = probabilityCrossover, 
@@ -47,5 +47,13 @@ for(i in 1:functions_num)
     print(results)
   }
   print(results)
-  write(results, file="results_with_history.txt")
+  #write.csv(results, file=paste('results',i,'.csv',sep=''),col.names = 5)
+  a = min(results)
+  b = mean(results)
+  c = median(results)
+  d = max(results)
+  row = c(a,b,c,d)
+  write.table(t(row), "results.csv", append = T, col.names = F, sep=',')
+  #write.table(r, file=paste('results.csv',sep=''),append = TRUE, sep = ',', col.names = i)
+  
 }
