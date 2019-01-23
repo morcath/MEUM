@@ -9,7 +9,7 @@ function_optima <- c(seq(from = -1400, to = -100, length = 14),
                      seq(from = 100, to = 1400, length = 14))
 function_dim = 10
 
-runs_num = 1
+runs_num = 50
 functions_num = 1#28
 dimensions_num = 1
 set.seed(1)
@@ -32,7 +32,7 @@ for(i in 1:functions_num)
     }
     
     result <- ga(type="real-valued",
-                 maxiter = 3,
+                 maxiter = 100,
                  useHistory = TRUE,
                  fitness=f,
                  popSize=populationSize,
@@ -40,10 +40,12 @@ for(i in 1:functions_num)
                  pmutation = probabilityMutation,
                  lower=rep(-100, function_dim),
                  upper=rep(100, function_dim))
-    print(result)
+
     solution <- summary(result)$solution
     error <- cec2013(i, solution) - function_optima[i]
     results <- c(results, error[1])
+    print(results)
   }
   print(results)
+  write(results, file="results_with_history.txt")
 }

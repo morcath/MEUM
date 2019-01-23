@@ -208,7 +208,7 @@ ga <- function(type = c("binary", "real-valued", "permutation"),
                 fitness = Fitness, 
                 summary = fitnessSummary,
                 bestSol = bestSol,
-                history = list(history.population = list(), history.fitness = list()) # 2 - add history var to object
+                history = list() # 2 - add history var to object
   )
   
   if(maxiter == 0)
@@ -251,13 +251,32 @@ ga <- function(type = c("binary", "real-valued", "permutation"),
     # update object
     object@population <- Pop
     object@fitness <- Fitness
-    object@history <- list(hisotry.population = list(object@history$hisotry.population, Pop),
-                           history.fitness = list(object@history$history.fitness, Fitness))
+    object@history$history.population[[length(object@history$history.population)+1]] <- Pop
+    object@history$history.fitness[[length(object@history$history.fitness)+1]] <- Fitness
     
     #update parameters based on history
-    if(useHistory & length(object@history$history.fitness) > 1)
+    if(useHistory & length(object@history$history.fitness) > 2)
     {
-      object@pmutation = object@pmutation * 0.9
+      alpha = 0.9
+      #print("---")
+      #print(pmutation)
+      #print("###")
+      size = length(object@history$history.fitness)
+
+      actual = summary(object@history$history.fitness[[size]])
+      actual = actual[4]
+      previous = summary(object@history$history.fitness[[size-1]])
+      previous = previous[4]
+      
+      if(actual<previous)
+      {
+        pmutation = pmutation * alpha
+      }
+      else
+      {
+        pmutation = pmutation * (1/alpha)
+      }
+
     }
     
     # update iterations summary
