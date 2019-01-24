@@ -34,7 +34,7 @@ for(i in 1:functions_num)
     result <- ga(type="real-valued",
                  maxiter = 100,
                  useHistory = TRUE,
-                 historySetting = 3,
+                 historySetting = 2,
                  fitness=f,
                  popSize=populationSize,
                  pcrossover = probabilityCrossover, 
@@ -45,16 +45,14 @@ for(i in 1:functions_num)
     solution <- summary(result)$solution
     error <- cec2013(i, solution) - function_optima[i]
     results <- c(results, error[1])
-    print(results)
   }
   print(results)
-  #write.csv(results, file=paste('results',i,'.csv',sep=''),col.names = 5)
   a = min(results)
   b = mean(results)
   c = median(results)
   d = max(results)
   row = c(a,b,c,d)
-  write.table(t(row), "results.csv", append = T, col.names = F, sep=',')
-  #write.table(r, file=paste('results.csv',sep=''),append = TRUE, sep = ',', col.names = i)
+  write.table(t(row), "results_2.csv", append = T, col.names = F, sep=',')
+  write.table(results, file=paste('resultsFull_2.csv',sep=''),append = TRUE, sep = ',', col.names = i)
   
 }

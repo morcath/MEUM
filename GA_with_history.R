@@ -260,9 +260,9 @@ ga <- function(type = c("binary", "real-valued", "permutation"),
     if(useHistory & length(object@history$history.fitness) > 2)
     {
       alpha = 0.99
-      print("---")
-      print(popSize)
-      print("###")
+      #print("---")
+      #print(popSize)
+      #print("###")
       size = length(object@history$history.fitness)
 
       actual = summary(object@history$history.fitness[[size]])
